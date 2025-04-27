@@ -64,8 +64,7 @@
     Mon porteur ne parle pas directement de moi,<br>
     mais son essence me trahit.<br>
     Cherche celui qui a bâti ce chemin,<br>
-    et déchiffre son message silencieux.<br>
-    <br>
+    et déchiffre son message silencieux.<br><br>
     Quelle est la clé ?
     </p>
     <input type="text" id="inputStep3" placeholder="Votre réponse ici...">
@@ -80,12 +79,13 @@
 </div>
 
 <script>
-let cooldownDuration = 12 * 60 * 60 * 1000; // 12 heures en millisecondes
+let cooldownDuration = 12 * 60 * 60 * 1000; // 12 heures
+let cooldownEndTime = localStorage.getItem('cooldownEndTime');
+let cooldownDurationStep3 = 12 * 60 * 60 * 1000; // 12 heures aussi
+let cooldownEndTimeStep3 = localStorage.getItem('cooldownEndTimeStep3');
+
 const step1Code = "le secret te sera révélé bientôt";
 const riddleAnswer = "the divinity has been released!";
-
-// Vérifie si un compte à rebours est déjà en place
-let cooldownEndTime = localStorage.getItem('cooldownEndTime');
 
 function validateStep1() {
     const input = document.getElementById('inputStep1').value.trim().toLowerCase();
@@ -117,12 +117,31 @@ function updateCooldown() {
     }, 1000);
 }
 
+function updateCooldownStep3() {
+    const interval = setInterval(() => {
+        const remaining = cooldownEndTimeStep3 - Date.now();
+        if (remaining > 0) {
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+            document.getElementById('cooldownTimer').innerText = `Temps restant: ${hours}:${minutes}:${seconds}`;
+        } else {
+            clearInterval(interval);
+            document.getElementById('cooldown').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+        }
+    }, 1000);
+}
+
 function validateQuiz() {
     const form = document.forms['quizForm'];
     if (form.q1.value === "ricochet" && form.q2.value === "gem" && form.q3.value === "epic") {
         localStorage.setItem('step2done', 'true');
+        cooldownEndTimeStep3 = Date.now() + cooldownDurationStep3;
+        localStorage.setItem('cooldownEndTimeStep3', cooldownEndTimeStep3);
         document.getElementById('step2').classList.add('hidden');
-        document.getElementById('step3').classList.remove('hidden');
+        document.getElementById('cooldown').classList.remove('hidden');
+        updateCooldownStep3();
     } else {
         document.getElementById('msgStep2').innerText = "Certaines réponses sont fausses. Réessaie.";
     }
@@ -149,13 +168,18 @@ window.onload = function() {
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.remove('hidden');
         }
-    }
-    if (localStorage.getItem('step2done') && !localStorage.getItem('step3done')) {
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.add('hidden');
-        document.getElementById('step3').classList.remove('hidden');
-    }
-    if (localStorage.getItem('step3done')) {
+    } else if (localStorage.getItem('step2done') && !localStorage.getItem('step3done')) {
+        if (cooldownEndTimeStep3 && Date.now() < cooldownEndTimeStep3) {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('cooldown').classList.remove('hidden');
+            updateCooldownStep3();
+        } else {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+        }
+    } else if (localStorage.getItem('step3done')) {
         document.getElementById('step1').classList.add('hidden');
         document.getElementById('step2').classList.add('hidden');
         document.getElementById('step3').classList.add('hidden');
