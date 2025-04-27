@@ -47,7 +47,7 @@
         <input type="radio" name="q2" value="survival"> Survivant<br>
         <input type="radio" name="q2" value="heist"> Braquage</p>
 
-        <p>Combien de piece faut t'il pour avoir un brawler pouvoir 11 avec tout de débloquer ?<br>
+        <p>Combien de pièces faut-il pour avoir un brawler pouvoir 11 avec tout débloqué ?<br>
         <input type="radio" name="q3" value="15 000"> 15 000 <br>
         <input type="radio" name="q3" value="22 763"> 22 763<br>
         <input type="radio" name="q3" value="23 765"> 23 765</p>
@@ -63,9 +63,9 @@
     Je ne suis pas dans les vidéos, mais juste à côté,<br>
     Là où ton créateur parle de lui, de ce qu’il fait,<br>
     Un petit texte t’attend pour mieux me connaître,<br>
-    CC’est ici que tu découvriras ce qui me rend unique.<br>
-    Là bas t'y attends une personne a hot dog qui fait des videos,<br><br>
-    Une fois trouvé, écris ci dessous le code permettant de finir la derniere étape!
+    C’est ici que tu découvriras ce qui me rend unique.<br>
+    Là bas t'y attends une personne à hot-dog qui fait des vidéos,<br><br>
+    Une fois trouvé, écris ci-dessous le code permettant de finir la dernière étape!
     </p>
     <input type="text" id="inputStep3" placeholder="Votre réponse ici...">
     <br>
@@ -75,7 +75,7 @@
 
 <div id="final" class="area hidden">
     <h2>🌟 Félicitations 🌟</h2>
-    <p>Tu as percé le voile de l'oubli et atteint l'Absolute Divinity. Fait un ticket sur le discord et envoie un screen de ce message pour obtenir le role secret!</p>
+    <p>Tu as percé le voile de l'oubli et atteint l'Absolute Divinity. Fait un ticket sur le discord et envoie un screen de ce message pour obtenir le rôle secret!</p>
 </div>
 
 <script>
@@ -135,7 +135,25 @@ function updateCooldownStep3() {
 
 function validateQuiz() {
     const form = document.forms['quizForm'];
-    if (form.q1.value === "ricochet" && form.q2.value === "gem" && form.q3.value === "epic") {
+    let allCorrect = true;
+
+    // Vérification de la première question
+    if (form.q1.value !== "ricochet") {
+        allCorrect = false;
+    }
+
+    // Vérification de la deuxième question
+    if (form.q2.value !== "gem") {
+        allCorrect = false;
+    }
+
+    // Vérification de la troisième question
+    if (form.q3.value !== "23 765") {
+        allCorrect = false;
+    }
+
+    // Affichage du message
+    if (allCorrect) {
         localStorage.setItem('step2done', 'true');
         cooldownEndTimeStep3 = Date.now() + cooldownDurationStep3;
         localStorage.setItem('cooldownEndTimeStep3', cooldownEndTimeStep3);
