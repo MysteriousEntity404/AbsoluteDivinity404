@@ -79,9 +79,9 @@
 </div>
 
 <script>
-let cooldownDuration = 12 * 60 * 60 * 1000; // 12 heures
+let cooldownDuration = 24 * 60 * 60 * 1000; // 24 heures
 let cooldownEndTime = localStorage.getItem('cooldownEndTime');
-let cooldownDurationStep3 = 12 * 60 * 60 * 1000; // 12 heures aussi
+let cooldownDurationStep3 = 24 * 60 * 60 * 1000; // 24 heures aussi
 let cooldownEndTimeStep3 = localStorage.getItem('cooldownEndTimeStep3');
 
 const step1Code = "le secret te sera révélé bientôt";
@@ -137,22 +137,16 @@ function validateQuiz() {
     const form = document.forms['quizForm'];
     let allCorrect = true;
 
-    // Vérification de la première question
     if (form.q1.value !== "ricochet") {
         allCorrect = false;
     }
-
-    // Vérification de la deuxième question
     if (form.q2.value !== "gem") {
         allCorrect = false;
     }
-
-    // Vérification de la troisième question
     if (form.q3.value !== "23 765") {
         allCorrect = false;
     }
 
-    // Affichage du message
     if (allCorrect) {
         localStorage.setItem('step2done', 'true');
         cooldownEndTimeStep3 = Date.now() + cooldownDurationStep3;
